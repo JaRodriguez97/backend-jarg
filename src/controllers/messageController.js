@@ -39,6 +39,7 @@ export const handleIncomingMessage = async (req, res) => {
   try {
     reply = await getGeminiReply(historyWithContext);
     if (reply.trim() == "[0420!*2025*NO]") reply = "";
+    console.log("🚀 ~ handleIncomingMessage ~ reply:", reply);
   } catch (err) {
     console.error("❌ Error llamando a Gemini:", err);
     reply = "Lo siento, ocurrió un error generando la respuesta.";
