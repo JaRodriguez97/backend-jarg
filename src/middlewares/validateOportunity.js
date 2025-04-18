@@ -12,7 +12,7 @@ export const validateOportunity = async (req, res, next) => {
 
   req.body.contextKey = contextKey;
 
-  if (!memory.has(contextKey)) memory.set(contextKey, [{}, 0]);
+  if (!memory.has(contextKey)) memory.set(contextKey, [[], 0]);
 
   req.body.history = memory.get(contextKey);
 
