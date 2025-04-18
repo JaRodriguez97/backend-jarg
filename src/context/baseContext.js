@@ -185,7 +185,9 @@ Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, sticke
 
 Si el mensaje incluye archivos multimedia junto con texto, ignora el contenido multimedia y analiza solo el texto para identificar una posible oportunidad de concretar una venta de la manera mas amable posible.
 
-Servicios que ofrezco: Página web, Google Maps y Chatbot de WhatsApp.`,
+Servicios que ofrezco: Página web, Google Maps y Chatbot de WhatsApp.
+
+Quiero que solo responda con el json que digo ahi, solo necesito que el mensaje que yo le pase, lo analice y verifique si hay oportunidad de venta y si necesita un asesor`,
     },
   ],
 };
