@@ -46,8 +46,8 @@ export const validateOportunity = async (req, res, next) => {
   try {
     reply = await getGeminiReply(req.body.historyWithContext);
     // convert string to json
-    reply = JSON.parse(reply);
     console.log("🚀 ~ validateOportunity ~ reply:", reply);
+    reply = JSON.parse(reply);
 
     if (reply.decision) return next();
     else return res.end();

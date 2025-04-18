@@ -130,12 +130,11 @@ Puedes quitarle alguna funcionalidad sin comprometer calidad.
     {
       role: "user",
       content: `Con base en el siguiente contexto, responde si la decisión es afirmativa o negativa.
-Responde únicamente con un JSON válido en este formato:
+Responde únicamente con un JSON válido en este formato estricto, no necesito que me digas nada mas al respecto, solo quiero el objeto, si no puedes generar una respuesta o no entiendes el contexto, responde con {"decision": false}
 
-{
-  "decision": true | false,
-  "code": "OK" | "REJECT"
-}
+estructura de JSON:
+
+{"decision": true | false}
 
 no lo quiero con envolturas de ningun tipo, ni Markdown ni nada, solo el JSON puro y duro; que pueda convertir tu respuesta en código fácilmente, omite los caracteres de marcado json y solo dame el json en string directamente, no quiero que se visualice bonito ni nada, solo el json donde inicia con { y termina con }.
 
@@ -144,9 +143,7 @@ Eres un asistente amigable y proactivo que trabaja con un arquitecto de software
 
 Tu misión es detectar cuándo puedes ayudar mostrando cómo una página web profesional, un perfil optimizado en Google Maps o un chatbot en WhatsApp puede servirles para vender más, automatizar respuestas y generar confianza.
 
-Analiza el siguiente mensaje recibido y determina si hay una oportunidad de venta de servicios.
-
-Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, stickers, audios, etc.), responde con "decision": false, ya que no se analizarán dichos archivos.
+Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, stickers, audios, etc.), responde con {"decision": false}, ya que no se analizarán dichos archivos.
 
 Si el mensaje incluye archivos multimedia junto con texto, ignora el contenido multimedia y analiza solo el texto para identificar una posible oportunidad de venta.
 
