@@ -6,7 +6,7 @@ const memory = new Map();
 export const validateOportunity = async (req, res, next) => {
   const { app, sender, message, group_name, phone } = req.body;
 
-  req.body.MAX_CONTEXT_MESSAGES = 6;
+  req.body.MAX_CONTEXT_MESSAGES = 12;
 
   const contextKey = group_name ? `group:${group_name}` : `user:${phone}`;
 
