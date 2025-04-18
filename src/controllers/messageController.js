@@ -2,19 +2,18 @@ import { baseContext } from "../context/baseContext.js";
 import { getGeminiReply } from "../services/geminiService.js";
 
 export const handleIncomingMessage = async (req, res) => {
-  const {
-    app,
-    sender,
-    message,
-    group_name,
-    phone,
-    contextKey,
-    historyWithContext,
-    history,
-    MAX_CONTEXT_MESSAGES,
-  } = req.body;
-
-  let reply = "";
+  let {
+      app,
+      sender,
+      message,
+      group_name,
+      phone,
+      contextKey,
+      historyWithContext,
+      history,
+      MAX_CONTEXT_MESSAGES,
+    } = req.body,
+    reply = "";
 
   if (group_name)
     historyWithContext = [baseContext.Group[0], ...req.body.history];
@@ -33,5 +32,11 @@ export const handleIncomingMessage = async (req, res) => {
   if (history.length > MAX_CONTEXT_MESSAGES)
     history.splice(0, history.length - MAX_CONTEXT_MESSAGES);
 
-  setTimeout(() => res.status(200).json({ reply }), 3000);
+  // Número aleatorio entre 5 y 10 con hasta 3 decimales
+  const segundos = +(Math.random() * (10 - 5) + 5).toFixed(3);
+
+  // Convertir a milisegundos
+  const milisegundos = Math.round(segundos * 1000);
+
+  setTimeout(() => res.status(200).json({ reply }), milisegundos);
 };
