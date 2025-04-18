@@ -31,9 +31,7 @@ export const validateOportunity = async (req, res, next) => {
   req.body.historyWithContext = [
     group_name
       ? baseContext.ValidateOprtunityGroup[0]
-      : sender.indexOf("Mi Amor") > -1
-      ? baseContext.PrivateAmor(sender)[0]
-      : baseContext.Private(sender)[0],
+      : baseContext.ValidateOprtunityPrivate[0],
     ...req.body.history[0],
   ];
 
