@@ -14,18 +14,17 @@ export const handleIncomingMessage = async (req, res) => {
   historyWithContext = [
     group_name
       ? baseContext.Group[0]
-      : sender.indexOf("Mi Amor") > -1
-      ? baseContext.PrivateAmor(sender)[0]
-      : baseContext.Private(sender, history[1])[0],
+      : // : sender.indexOf("Mi Amor") > -1
+        // ? baseContext.PrivateAmor(sender)[0]
+        baseContext.Private(sender, history[1])[0],
     ...history[0],
   ];
 
   try {
     reply = await getGeminiReply(historyWithContext);
-    console.log("🚀 ~ handleIncomingMessage ~ reply:", reply);
   } catch (err) {
     console.error("❌ Error llamando a Gemini:", err);
-    return res.status(200).json({ reply: "" });
+    return res.status(200).send({ reply: "" });
   }
 
   // Guardar respuesta del modelo
@@ -40,6 +39,6 @@ export const handleIncomingMessage = async (req, res) => {
   // Convertir a milisegundos
   const milisegundos = Math.round(segundos * 1000);
 
-  if (group_name) res.status(200).json({ reply: "" });
-  else setTimeout(() => res.status(200).json({ reply }), milisegundos);
+  if (group_name) res.status(200).send({ reply: "" });
+  else setTimeout(() => res.status(200).send({ reply }), milisegundos);
 };

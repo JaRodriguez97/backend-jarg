@@ -39,13 +39,18 @@ export const validateOportunity = async (req, res, next) => {
   try {
     let reply = await getGeminiReply(req.body.historyWithContext);
 
+    reply = reply
+      .replace(/```json\s*/, "") // elimina ```json y posibles espacios/líneas
+      .replace(/```/, "") // elimina la marca de cierre ```
+      .trim();
+
     // Validamos que sea un objeto JSON antes de parsear
     if (!esObjetoJSON(reply)) {
       console.error(
         "❌ La respuesta de Gemini no es un objeto JSON válido:",
         reply
       );
-      return res.status(200).json({ reply: "" });
+      return res.status(200).send({ reply: "" });
     }
 
     reply = JSON.parse(reply);
@@ -53,10 +58,10 @@ export const validateOportunity = async (req, res, next) => {
     req.body.history[1] = reply.asesor;
 
     if (reply.decision) return next();
-    else return res.status(200).json({ reply: "" });
+    else return res.status(200).send({ reply: "" });
   } catch (err) {
     console.error("❌ Error llamando a Gemini:", err);
-    res.status(200).json({ reply: "" });
+    res.status(200).send({ reply: "" });
   }
 };
 

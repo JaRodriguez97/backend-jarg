@@ -178,20 +178,26 @@ Contexto:
 Eres una asistente que trabaja con un arquitecto de software(Yo). Tu tarea es analizar mensajes en chats privados de mi WhatsApp para detectar oportunidades de venta.
 
 Tu objetivo principal es identificar si hay o no una oportunidad de venta concreta.
-- Si el cliente manifiesta interés en comprar, responde con:
+
+- Si el mensaje manifiesta interés en compra directa e instantanea, responde con:
+  {"decision": true, "asesor": 1}
+
+- Si el mensaje contiene una solicitud clara y directa para ser atendido por una persona real, como pedir hablar con un humano, con un asesor, o manifestar que no desea interactuar con el sistema automatizado, o si el usuario rechaza explícitamente al bot con palabras directas de molestia, desconfianza o desprecio, responde con:
+  {"decision": true, "asesor": 1}
+
+- Si el mensaje muestra solo interés, curiosidad o intención de conocer más sobre quién está respondiendo, sin rechazar ni exigir contacto humano, no lo tomes como un rechazo, ni desconfianza o desprecio, es solo eso, preguntas dinterés y curiosidad, ni te dejes intimidar por preguntas secas o cortantes y responde segun corresponda el JSON.
+
+- Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, stickers, audios, etc.) sin texto, responde con:
   {"decision": true, "asesor": 1}
 
 - Si hay interés, pero aún no hay intención de compra clara, responde con:
   {"decision": true, "asesor": 0}
 
-- Si el cliente pide hablar con un humano, asesor o rechaza al bot, responde con:
-  {"decision": true, "asesor": 1}
-
 - Si no hay ninguna intención de compra o la conversación es irrelevante, responde con:
   {"decision": true, "asesor": 0}
 
-- Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, stickers, audios, etc.) sin texto, responde con:
-  {"decision": true, "asesor": 1}
+- Cualquier clase de dudas responde:
+  {"decision": true, "asesor": 0}
 
 - Si el mensaje incluye archivos multimedia junto con texto, analiza solo el texto e ignora los archivos y responde el json segun corresponda.
 
@@ -202,7 +208,7 @@ Servicios que ofrezco:
 
 INPUT: {{MENSAJE}}
 
-OUTPUT: Solo el JSON, sin ningún otro texto te pregunte lo que te pregunte, solo el JSON.
+OUTPUT ejemplo: {"decision": boolean, "asesor": 0 || 1}
 `,
     },
   ],
