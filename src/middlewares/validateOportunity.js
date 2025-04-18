@@ -16,7 +16,8 @@ export const validateOportunity = async (req, res, next) => {
 
   req.body.history = memory.get(contextKey);
 
-  if (!group_name && req.body.history[1] == 1) return res.status(204).end();
+  if (!group_name && req.body.history[1] == 1)
+    return res.status(200).json({ reply: "" });
 
   // Añadir nuevo mensaje del usuario
   req.body.history[0].push({ role: "user", content: message });
@@ -44,7 +45,7 @@ export const validateOportunity = async (req, res, next) => {
         "❌ La respuesta de Gemini no es un objeto JSON válido:",
         reply
       );
-      return res.status(204).end();
+      return res.status(200).json({ reply: "" });
     }
 
     reply = JSON.parse(reply);
@@ -52,10 +53,10 @@ export const validateOportunity = async (req, res, next) => {
     req.body.history[1] = reply.asesor;
 
     if (reply.decision) return next();
-    else return res.status(204).end();
+    else return res.status(200).json({ reply: "" });
   } catch (err) {
     console.error("❌ Error llamando a Gemini:", err);
-    res.status(204).end();
+    res.status(200).json({ reply: "" });
   }
 };
 
