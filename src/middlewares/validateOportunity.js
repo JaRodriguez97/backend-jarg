@@ -4,7 +4,7 @@ import { getGeminiReply } from "../services/geminiService.js";
 const memory = new Map();
 
 export const validateOportunity = async (req, res, next) => {
-  const { app, sender, message, group_name, phone } = req.body;
+  const { sender, message, group_name, phone } = req.body;
 
   req.body.MAX_CONTEXT_MESSAGES = 12;
 
@@ -12,34 +12,29 @@ export const validateOportunity = async (req, res, next) => {
 
   req.body.contextKey = contextKey;
 
-  if (!memory.has(contextKey)) memory.set(contextKey, []);
+  if (!memory.has(contextKey)) memory.set(contextKey, [{}, 0]);
 
   req.body.history = memory.get(contextKey);
 
-  // Añadir nuevo mensaje del usuario
-  req.body.history.push({ role: "user", content: message });
+  if (!group_name && req.body.history[1] == 1) return res.status(204).end();
 
-  if (req.body.history.length > req.body.MAX_CONTEXT_MESSAGES) {
-    req.body.history.splice(
+  // Añadir nuevo mensaje del usuario
+  req.body.history[0].push({ role: "user", content: message });
+
+  if (req.body.history[0].length > req.body.MAX_CONTEXT_MESSAGES) {
+    req.body.history[0].splice(
       0,
       req.body.history.length - req.body.MAX_CONTEXT_MESSAGES
     );
   }
 
-  if (!group_name) {
-    req.body.historyWithContext = [
-      sender == "Mi Amor ♥️"
-        ? baseContext.PrivateAmor(sender)[0]
-        : baseContext.Private(sender)[0],
-      ...req.body.history,
-    ];
-
-    return next();
-  }
-
   req.body.historyWithContext = [
-    baseContext.ValidateOprtunityGroup[0],
-    ...req.body.history,
+    group_name
+      ? baseContext.ValidateOprtunityGroup[0]
+      : sender.indexOf("Mi Amor") > -1
+      ? baseContext.PrivateAmor(sender)[0]
+      : baseContext.Private(sender)[0],
+    ...req.body.history[0],
   ];
 
   try {
@@ -55,6 +50,8 @@ export const validateOportunity = async (req, res, next) => {
     }
 
     reply = JSON.parse(reply);
+
+    req.body.history[1] = reply.asesor;
 
     if (reply.decision) return next();
     else return res.status(204).end();

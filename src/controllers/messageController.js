@@ -3,20 +3,22 @@ import { getGeminiReply } from "../services/geminiService.js";
 
 export const handleIncomingMessage = async (req, res) => {
   let {
-      app,
       sender,
-      message,
       group_name,
-      phone,
-      contextKey,
       historyWithContext,
       history,
       MAX_CONTEXT_MESSAGES,
     } = req.body,
     reply = "";
 
-  if (group_name)
-    historyWithContext = [baseContext.Group[0], ...req.body.history];
+  historyWithContext = [
+    group_name
+      ? baseContext.Group[0]
+      : sender.indexOf("Mi Amor") > -1
+      ? baseContext.PrivateAmor(sender)[0]
+      : baseContext.Private(sender, history[1])[0],
+    ...history[0],
+  ];
 
   try {
     reply = await getGeminiReply(historyWithContext);
@@ -27,10 +29,10 @@ export const handleIncomingMessage = async (req, res) => {
   }
 
   // Guardar respuesta del modelo
-  history.push({ role: "model", content: reply });
+  history[0].push({ role: "model", content: reply });
 
-  if (history.length > MAX_CONTEXT_MESSAGES)
-    history.splice(0, history.length - MAX_CONTEXT_MESSAGES);
+  if (history[0].length > MAX_CONTEXT_MESSAGES)
+    history[0].splice(0, history[0].length - MAX_CONTEXT_MESSAGES);
 
   // Número aleatorio entre 5 y 10 con hasta 3 decimales
   const segundos = +(Math.random() * (10 - 5) + 5).toFixed(3);
