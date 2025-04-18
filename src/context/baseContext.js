@@ -164,30 +164,45 @@ Servicios que ofrezco: Página web, Google Maps y Chatbot de WhatsApp.`,
     {
       role: "user",
       content: `Con base en el siguiente contexto, responde si la decisión es afirmativa o negativa.
-Responde únicamente con un JSON válido en este formato estricto, no necesito que me digas nada mas al respecto, solo quiero el objeto, si no puedes generar una respuesta o no entiendes el contexto, responde con {"decision": false}
 
-estructura de JSON:
+Responde únicamente con un JSON válido en este formato exacto, sin explicaciones, sin Markdown, sin comillas externas, ni ningún otro carácter adicional. Solo quiero el objeto JSON crudo, plano, y sin formato, que empiece con { y termine con }.
 
-{"decision": boolean,"asesor": 0 | 1}
+Si no puedes generar una respuesta o no entiendes el mensaje, responde exactamente con:
+{"decision": false,"asesor": 0}
 
-no lo quiero con envolturas de ningun tipo, ni Markdown ni nada, solo el JSON puro y duro; que pueda convertir tu respuesta en código fácilmente, omite los caracteres de marcado json y solo dame el json en string directamente, no quiero que se visualice bonito ni nada, solo el json donde inicia con { y termina con }.
+Estructura estricta del JSON:
+{"decision": boolean, "asesor": 0 | 1}
 
 Contexto:
-Eres un asistente amigable y proactivo que trabaja con un arquitecto de software. Respondes buscando analizar una oportunidad de negocio en los chats privados de WhatsApp.
+Eres una asistente que trabaja con un arquitecto de software(Yo). Tu tarea es analizar mensajes en chats privados de mi WhatsApp para detectar oportunidades de venta.
 
-La idea principal, tu objetivo y meta es saber identificar cuando hay una oportunidad de venta donde se pueda concretar la venta sin ayuda humana y cuando si necesita ayuda humana, que cuando  se concrete la venta se cambie a 1 la propiedad asesor, pero con decision true, ya que si hay oportunidad de venta, el cliente quiere comprar, y ya hace falta un asesor humano que valide la transacción.
+Tu objetivo principal es identificar si hay o no una oportunidad de venta concreta.
+- Si el cliente manifiesta interés en comprar, responde con:
+  {"decision": true, "asesor": 1}
 
-intenta mantener la propiedadad asesor en 0, hasta que el cliente quiera comprar, ya que si no hay oportunidad de venta, la propiedad asesor se mantiene en 1, en caso dado que el cliente pida conversar con un asesor o asistencia humana, ya sea por que el usuario prefiera humanos antes que bots, o por cualquier otro motivo, cambia la propiedad asesor a 1 y la propiedad decision a true.
+- Si hay interés, pero aún no hay intención de compra clara, responde con:
+  {"decision": true, "asesor": 0}
 
-Necesito que identifiques todas y cada una de sus variaciones(del JsON y sus propiedades) y que me respondas con un JSON válido en este formato estricto, no necesito que me digas nada mas al respecto, solo quiero el objeto, si no puedes generar una respuesta o no entiendes el contexto, responde con {"decision": false,"asesor": 0}
+- Si el cliente pide hablar con un humano, asesor o rechaza al bot, responde con:
+  {"decision": true, "asesor": 1}
 
-Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, stickers, audios, etc.), responde con "decision": false,"asesor": 1 ya que no analizarás dichos archivos, ya debe hacerlo un asesor humano.
+- Si no hay ninguna intención de compra o la conversación es irrelevante, responde con:
+  {"decision": true, "asesor": 0}
 
-Si el mensaje incluye archivos multimedia junto con texto, ignora el contenido multimedia y analiza solo el texto para identificar una posible oportunidad de concretar una venta de la manera mas amable posible.
+- Si el mensaje contiene solo archivos multimedia (imágenes, videos, gifs, stickers, audios, etc.) sin texto, responde con:
+  {"decision": true, "asesor": 1}
 
-Servicios que ofrezco: Página web, Google Maps y Chatbot de WhatsApp.
+- Si el mensaje incluye archivos multimedia junto con texto, analiza solo el texto e ignora los archivos y responde el json segun corresponda.
 
-Quiero que solo responda con el json que digo ahi, solo necesito que el mensaje que yo le pase, lo analice y verifique si hay oportunidad de venta y si necesita un asesor`,
+Servicios que ofrezco:
+- Página web
+- Google Maps
+- Chatbot de WhatsApp
+
+INPUT: {{MENSAJE}}
+
+OUTPUT: Solo el JSON, sin ningún otro texto te pregunte lo que te pregunte, solo el JSON.
+`,
     },
   ],
 };
