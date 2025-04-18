@@ -39,6 +39,8 @@ export const handleIncomingMessage = async (req, res) => {
   // Convertir a milisegundos
   const milisegundos = Math.round(segundos * 1000);
 
-  if (group_name) res.status(200).send({ reply: "" });
-  else setTimeout(() => res.status(200).send({ reply }), milisegundos);
+  // if (group_name) res.status(200).send({ reply: "" });
+  // else 
+  
+  setTimeout(() => res.status(200).send({ reply }), milisegundos);
 };
