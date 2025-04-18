@@ -42,18 +42,33 @@ export const validateOportunity = async (req, res, next) => {
     ...req.body.history,
   ];
 
-  let reply = "";
   try {
-    reply = await getGeminiReply(req.body.historyWithContext);
-    // convert string to json
-    console.log("🚀 ~ validateOportunity ~ reply:", reply);
+    let reply = await getGeminiReply(req.body.historyWithContext);
+
+    // Validamos que sea un objeto JSON antes de parsear
+    if (!esObjetoJSON(reply)) {
+      console.error(
+        "❌ La respuesta de Gemini no es un objeto JSON válido:",
+        reply
+      );
+      return res.status(204).end();
+    }
+
     reply = JSON.parse(reply);
 
     if (reply.decision) return next();
-    else return res.end();
+    else return res.status(204).end();
   } catch (err) {
     console.error("❌ Error llamando a Gemini:", err);
-    reply = "Lo siento, ocurrió un error generando la respuesta.";
-    res.end();
+    res.status(204).end();
   }
 };
+
+function esObjetoJSON(str) {
+  try {
+    const parsed = JSON.parse(str);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed);
+  } catch {
+    return false;
+  }
+}

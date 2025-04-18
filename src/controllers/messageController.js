@@ -22,8 +22,7 @@ export const handleIncomingMessage = async (req, res) => {
     reply = await getGeminiReply(historyWithContext);
   } catch (err) {
     console.error("❌ Error llamando a Gemini:", err);
-    reply = "Lo siento, ocurrió un error generando la respuesta.";
-    return res.end();
+    return res.status(204).end();
   }
 
   // Guardar respuesta del modelo
@@ -38,5 +37,6 @@ export const handleIncomingMessage = async (req, res) => {
   // Convertir a milisegundos
   const milisegundos = Math.round(segundos * 1000);
 
+  return res.status(204).end();
   setTimeout(() => res.status(200).json({ reply }), milisegundos);
 };
