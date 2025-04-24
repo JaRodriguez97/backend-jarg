@@ -22,10 +22,10 @@ export const validateOportunity = async (req, res, next) => {
   // Añadir nuevo mensaje del usuario
   req.body.history[0].push({ role: "user", content: message });
 
-  if (req.body.history[0].length > req.body.MAX_CONTEXT_MESSAGES) {
+  if (req.body.history[0].length >= req.body.MAX_CONTEXT_MESSAGES) {
     req.body.history[0].splice(
-      0,
-      req.body.history.length - req.body.MAX_CONTEXT_MESSAGES
+      1,
+      req.body.history.length + 1 - req.body.MAX_CONTEXT_MESSAGES
     );
   }
 
