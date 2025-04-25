@@ -33,8 +33,6 @@ export const getGeminiReply = async (history = []) => {
 
   const data = await response.json();
 
-  const reply =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    "No pude generar una respuesta.";
+  const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
   return reply;
 };

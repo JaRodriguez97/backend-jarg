@@ -6,7 +6,7 @@ const memory = new Map();
 export const validateOportunity = async (req, res, next) => {
   const { sender, message, group_name, phone } = req.body;
 
-  req.body.MAX_CONTEXT_MESSAGES = 12;
+  req.body.MAX_CONTEXT_MESSAGES = 30;
 
   const contextKey = group_name ? `group:${group_name}` : `user:${phone}`;
 
@@ -19,22 +19,32 @@ export const validateOportunity = async (req, res, next) => {
   if (!group_name && req.body.history[1] == 1)
     return res.status(200).json({ reply: "" });
 
-  // Añadir nuevo mensaje del usuario
-  req.body.history[0].push({ role: "user", content: message });
-
   if (req.body.history[0].length >= req.body.MAX_CONTEXT_MESSAGES) {
     req.body.history[0].splice(
-      1,
+      0,
       req.body.history.length + 1 - req.body.MAX_CONTEXT_MESSAGES
     );
   }
 
+  // Añadir nuevo mensaje del usuario
+  req.body.history[0].push({ role: "user", content: message });
+
   req.body.historyWithContext = [
+    {
+      role: "user",
+      content:
+        "Necesito analices los siguientes mensajes para tenerlos como contexto, la estructura con la que respondes siempre debe ser estrictamente esta: {'decision': boolean, 'asesor': 0 | 1}, espera las instrucciones y no respondas nada más. No me digas que no puedes, porque si puedes responder solo con {'decision': boolean, 'asesor': 0 | 1}.",
+    },
+    ...req.body.history[0],
     group_name
       ? baseContext.ValidateOprtunityGroup[0]
       : baseContext.ValidateOprtunityPrivate[0],
-    ...req.body.history[0],
   ];
+
+  console.log(
+    "🚀 ~ validateOportunity ~ req.body.historyWithContext:",
+    req.body.historyWithContext
+  );
 
   try {
     let reply = await getGeminiReply(req.body.historyWithContext);
@@ -54,6 +64,7 @@ export const validateOportunity = async (req, res, next) => {
     }
 
     reply = JSON.parse(reply);
+    console.log("🚀 ~ validateOportunity ~ reply:", reply);
 
     req.body.history[1] = reply.asesor;
 

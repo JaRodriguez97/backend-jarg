@@ -30,8 +30,8 @@ export const handleIncomingMessage = async (req, res) => {
   // Guardar respuesta del modelo
   history[0].push({ role: "model", content: reply });
 
-  if (history[0].length > MAX_CONTEXT_MESSAGES)
-    history[0].splice(0, history[0].length - MAX_CONTEXT_MESSAGES);
+  if (history[0].length >= MAX_CONTEXT_MESSAGES)
+    history[0].splice(0, history[0].length + 1 - MAX_CONTEXT_MESSAGES);
 
   // Número aleatorio entre 5 y 10 con hasta 3 decimales
   const segundos = +(Math.random() * (10 - 5) + 5).toFixed(3);
@@ -40,7 +40,7 @@ export const handleIncomingMessage = async (req, res) => {
   const milisegundos = Math.round(segundos * 1000);
 
   // if (group_name) res.status(200).send({ reply: "" });
-  // else 
-  
+  // else
+
   setTimeout(() => res.status(200).send({ reply }), milisegundos);
 };
