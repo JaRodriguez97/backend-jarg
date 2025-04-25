@@ -41,11 +41,6 @@ export const validateOportunity = async (req, res, next) => {
       : baseContext.ValidateOprtunityPrivate[0],
   ];
 
-  console.log(
-    "🚀 ~ validateOportunity ~ req.body.historyWithContext:",
-    req.body.historyWithContext
-  );
-
   try {
     let reply = await getGeminiReply(req.body.historyWithContext);
 
@@ -64,7 +59,6 @@ export const validateOportunity = async (req, res, next) => {
     }
 
     reply = JSON.parse(reply);
-    console.log("🚀 ~ validateOportunity ~ reply:", reply);
 
     req.body.history[1] = reply.asesor;
 
