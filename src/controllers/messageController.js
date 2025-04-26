@@ -14,9 +14,7 @@ export const handleIncomingMessage = async (req, res) => {
   historyWithContext = [
     group_name
       ? baseContext.Group[0]
-      : // : sender.indexOf("Mi Amor") > -1
-        // ? baseContext.PrivateAmor(sender)[0]
-        baseContext.Private(sender, history[1])[0],
+      : baseContext.Private(sender, history[1])[0],
     ...history[0],
   ];
 

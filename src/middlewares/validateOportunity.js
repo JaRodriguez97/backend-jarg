@@ -26,8 +26,22 @@ export const validateOportunity = async (req, res, next) => {
     );
   }
 
+  if (
+    group_name &&
+    req.body.history[0].length - 2 >= 0 &&
+    req.body.history[0][req.body.history[0].length - 2] &&
+    req.body.history[0][req.body.history[0].length - 2].role &&
+    req.body.history[0][req.body.history[0].length - 2].role == "user" &&
+    req.body.history[0][req.body.history[0].length - 2].content === message
+  )
+    return res.status(200).json({ reply: "" });
+
   // Añadir nuevo mensaje del usuario
   req.body.history[0].push({ role: "user", content: message });
+  console.log(
+    "🚀 ~ validateOportunity ~ req.body.history[0]:",
+    req.body.history[0]
+  );
 
   req.body.historyWithContext = [
     {
@@ -43,6 +57,7 @@ export const validateOportunity = async (req, res, next) => {
 
   try {
     let reply = await getGeminiReply(req.body.historyWithContext);
+    console.log("🚀 ~ validateOportunity ~ reply:", reply);
 
     reply = reply
       .replace(/```json\s*/, "") // elimina ```json y posibles espacios/líneas
@@ -52,7 +67,7 @@ export const validateOportunity = async (req, res, next) => {
     // Validamos que sea un objeto JSON antes de parsear
     if (!esObjetoJSON(reply)) {
       console.error(
-        "❌ La respuesta de Gemini no es un objeto JSON válido:",
+        "❌ La respuesta de Gemini no es un objeto JSON válido: ",
         reply
       );
       return res.status(200).send({ reply: "" });
